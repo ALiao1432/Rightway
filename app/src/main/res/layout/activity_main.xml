@@ -8,36 +8,34 @@
     tools:context=".MainActivity"
     tools:layout_editor_absoluteY="25dp">
 
-
     <Button
-        android:id="@+id/btnHighwaySpeed"
+        android:id="@+id/btnSelectSpeed"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/btn_shape"
         android:foreground="?attr/selectableItemBackground"
         android:text="@string/highway_speed"
-        android:textSize="50sp"
         android:textColor="#fcfcfc"
-        app:layout_constraintBottom_toTopOf="@+id/btnHighwayEvent"
+        android:textSize="50sp"
+        app:layout_constraintBottom_toTopOf="@+id/btnSelectEvent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/btnHighwayEvent"
+        android:id="@+id/btnSelectEvent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/btn_shape"
         android:foreground="?attr/selectableItemBackground"
         android:text="@string/highway_event"
-        android:textSize="50sp"
         android:textColor="#fcfcfc"
+        android:textSize="50sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnHighwaySpeed" />
-
+        app:layout_constraintTop_toBottomOf="@+id/btnSelectSpeed" />
 
 </android.support.constraint.ConstraintLayout>
