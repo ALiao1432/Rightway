@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Rightway</string>
+    <string name="highway_speed">行車速度</string>
+    <string name="highway_event">施工事件</string>
 </resources>
