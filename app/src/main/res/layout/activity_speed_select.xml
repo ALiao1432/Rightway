@@ -6,4 +6,18 @@
     android:layout_height="match_parent"
     tools:context=".select.SpeedSelectActivity">
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.study.ian.rightway.customView.HighwayNameView
+            android:id="@+id/highwayNameView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </ScrollView>
+
 </android.support.constraint.ConstraintLayout>

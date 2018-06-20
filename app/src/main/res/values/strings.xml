@@ -2,4 +2,79 @@
     <string name="app_name">Rightway</string>
     <string name="highway_speed">行車速度</string>
     <string name="highway_event">施工事件</string>
+
+    <string-array name="highway_names">
+        <item>國道1號</item>
+        <item>國1高架</item>
+        <item>國道3甲</item>
+        <item>國道2號</item>
+        <item>國道3號</item>
+        <item>國道4號</item>
+        <item>國道5號</item>
+        <item>國道6號</item>
+        <item>國道8號</item>
+        <item>國道10號</item>
+        <item>快速公路62號</item>
+        <item>快速公路64號</item>
+        <item>快速公路66號</item>
+        <item>快速公路68號</item>
+        <item>快速公路72號</item>
+        <item>快速公路74號</item>
+        <item>快速公路76號</item>
+        <item>快速公路78號</item>
+        <item>快速公路82號</item>
+        <item>快速公路84號</item>
+        <item>快速公路86號</item>
+        <item>快速公路88號</item>
+    </string-array>
+
+    <string-array name="highway_icon_text">
+        <item>1</item>
+        <item>1高</item>
+        <item>3甲</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>8</item>
+        <item>10</item>
+        <item>62</item>
+        <item>64</item>
+        <item>66</item>
+        <item>68</item>
+        <item>72</item>
+        <item>74</item>
+        <item>76</item>
+        <item>78</item>
+        <item>82</item>
+        <item>84</item>
+        <item>86</item>
+        <item>88</item>
+    </string-array>
+
+    <string-array name="highway_connect_code">
+        <item>10010</item>
+        <item>10019</item>
+        <item>10031</item>
+        <item>10020</item>
+        <item>10030</item>
+        <item>10040</item>
+        <item>10050</item>
+        <item>10060</item>
+        <item>10080</item>
+        <item>10100</item>
+        <item>20620</item>
+        <item>20640</item>
+        <item>20660</item>
+        <item>20680</item>
+        <item>20720</item>
+        <item>20740</item>
+        <item>20760</item>
+        <item>20780</item>
+        <item>20820</item>
+        <item>20840</item>
+        <item>20860</item>
+        <item>20880</item>
+    </string-array>
 </resources>
