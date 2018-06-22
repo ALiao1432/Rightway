@@ -1,4 +1,4 @@
-package com.study.ian.rightway.svgUtil;
+package com.study.ian.rightway.util;
 
 import android.animation.ValueAnimator;
 import android.content.Context;

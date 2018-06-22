@@ -1,17 +1,20 @@
 package com.study.ian.rightway.customView;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.os.Bundle;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
 import com.study.ian.rightway.R;
+import com.study.ian.rightway.result.SpeedResultActivity;
 
 public class HighwayNameView extends View {
 
@@ -22,10 +25,12 @@ public class HighwayNameView extends View {
     private Paint stringPaint;
     private Paint ovalPaint;
 
+    public final static String KEY_CONNECT = "KEY_CONNECT";
     private final String[] highwayNames = getResources().getStringArray(R.array.highway_names);
+    private final String[] highwayConnectCode = getResources().getStringArray(R.array.highway_connect_code);
     private int wSize;
     private int hSize;
-    private int singleSize = 360;
+    private int singleSize;
     private boolean isMoved = false;
 
     @Override
@@ -33,6 +38,9 @@ public class HighwayNameView extends View {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 
         wSize = MeasureSpec.getSize(widthMeasureSpec);
+        hSize = MeasureSpec.getSize(widthMeasureSpec);
+
+        singleSize = Math.round(hSize * .325f);
         hSize = highwayNames.length * singleSize;
 
         initRect();
@@ -53,19 +61,23 @@ public class HighwayNameView extends View {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
 
-
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                Log.d(TAG, "MotionEvent.ACTION_DOWN");
                 isMoved = false;
                 return true;
             case MotionEvent.ACTION_UP:
                 int x = Math.round(event.getX());
                 int y = Math.round(event.getY());
-                Log.d(TAG, "MotionEvent.ACTION_UP");
+
                 for (int i = 0; i < rectF.length; i++) {
                     if (!isMoved && rectF[i].contains(x, y)) {
-                        Log.d(TAG, "touch : " + highwayNames[i]);
+                        Bundle bundle = new Bundle();
+                        Intent intent = new Intent();
+
+                        bundle.putString(KEY_CONNECT, highwayConnectCode[i]);
+                        intent.setClass(this.getContext(), SpeedResultActivity.class);
+                        intent.putExtras(bundle);
+                        this.getContext().startActivity(intent);
                     }
                 }
                 break;
