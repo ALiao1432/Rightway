@@ -4,15 +4,21 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
-import android.view.View;
 import android.widget.ScrollView;
 
+import com.study.ian.rightway.R;
+import com.study.ian.rightway.util.DataPath;
 import com.study.ian.rightway.util.GatewayInfo;
+import com.study.ian.rightway.util.MorphView;
+import com.study.ian.rightway.util.SvgData;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -24,7 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
-public class SpeedView extends View {
+public class SpeedView extends MorphView {
 
     private final String TAG = "SpeedView";
 
@@ -36,6 +42,8 @@ public class SpeedView extends View {
     private Paint speedTextPaint;
     private Paint speedTextBoldPaint;
     private Paint speedCirclePaint;
+    private Rect rect = new Rect();
+    private SvgData svgData = new SvgData(this.getContext());
     private String[] speedColors = {
             "#512DA8", // speed < 20
             "#D32F2F", // 20 <= speed <= 39
@@ -46,7 +54,12 @@ public class SpeedView extends View {
     private boolean isGatewayInfoReady = false;
     private int wSize;
     private int hSize;
-    private float singleGateSize = 500;
+    private float paintWidth;
+    private float stringSize;
+    private float speedTextSize;
+    private float singleGateSize;
+    private float upDownRectSize;
+    private float speedCircleRadius;
 
     @Override
     public boolean performClick() {
@@ -72,18 +85,27 @@ public class SpeedView extends View {
 
         wSize = MeasureSpec.getSize(widthMeasureSpec);
         hSize = MeasureSpec.getSize(heightMeasureSpec);
+        paintWidth = wSize * .0125f;
+        stringSize = wSize * .08f;
+        speedTextSize = wSize * .068f;
+        singleGateSize = hSize * .3225f;
+        upDownRectSize = hSize * .12f;
+        speedCircleRadius = wSize * .088f;
+
+        initPaint();
 
         if (!isGatewayInfoReady) {
             setMeasuredDimension(wSize, hSize);
         } else {
-            setMeasuredDimension(wSize, Math.round(infoList.size() * singleGateSize));
+            setMeasuredDimension(
+                    wSize,
+                    Math.round(infoList.size() * singleGateSize + upDownRectSize * 2)
+            );
         }
     }
 
     public SpeedView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-
-        initPaint();
     }
 
     public void setScrollView(ScrollView scrollView) {
@@ -91,17 +113,17 @@ public class SpeedView extends View {
     }
 
     private void initPaint() {
-        stringPaint = getPaint("#fcfcfc", Paint.Style.FILL, 80);
-        ovalPaint = getPaint("#202124", Paint.Style.FILL, 200);
-        linePaint = getPaint("#00897b", Paint.Style.STROKE, 200);
-        speedTextPaint = getPaint("#fcfcfc", Paint.Style.FILL, 80);
-        speedTextBoldPaint = getPaint("#000000", Paint.Style.STROKE, 80);
-        speedCirclePaint = getPaint(speedColors[0], Paint.Style.FILL, 0);
+        stringPaint = getPaint("#fcfcfc", Paint.Style.FILL, stringSize, paintWidth);
+        ovalPaint = getPaint("#202124", Paint.Style.FILL, 200, paintWidth);
+        linePaint = getPaint("#00897b", Paint.Style.STROKE, 200, paintWidth);
+        speedTextPaint = getPaint("#fcfcfc", Paint.Style.FILL, speedTextSize, paintWidth);
+        speedTextBoldPaint = getPaint("#000000", Paint.Style.STROKE, speedTextSize, paintWidth);
+        speedCirclePaint = getPaint(speedColors[0], Paint.Style.FILL, 0, paintWidth);
 
         speedTextBoldPaint.setStrokeWidth(1.5f);
     }
 
-    private Paint getPaint(String color, Paint.Style style, float textSize) {
+    private Paint getPaint(String color, Paint.Style style, float textSize, float width) {
         Paint p = new Paint();
 
         p.setStyle(style);
@@ -109,7 +131,7 @@ public class SpeedView extends View {
         p.setTextSize(textSize);
         p.setAntiAlias(true);
         p.setStrokeCap(Paint.Cap.ROUND);
-        p.setStrokeWidth(12);
+        p.setStrokeWidth(width);
 
         return p;
     }
@@ -124,7 +146,6 @@ public class SpeedView extends View {
 
         new Thread(() -> {
             try {
-                Log.d(TAG, "http://1968.freeway.gov.tw/traffic/index/fid/" + connectCode);
                 Document document = Jsoup.connect("http://1968.freeway.gov.tw/traffic/index/fid/" + connectCode).get();
                 Element content = document.getElementById("secs_body");
                 Elements secNames = content.getElementsByClass("sec_name");
@@ -179,7 +200,135 @@ public class SpeedView extends View {
     }
 
     public void drawGateway(Canvas canvas, GatewayInfo info, int number) {
+        canvas.drawRoundRect(
+                wSize * .075f,
+                upDownRectSize + singleGateSize * number + singleGateSize * .3f,
+                wSize * .925f,
+                upDownRectSize + singleGateSize * number + singleGateSize * .7f,
+                singleGateSize * .2f,
+                singleGateSize * .2f,
+                linePaint
+        );
 
+        stringPaint.getTextBounds(info.getGatewayName(), 0, info.getGatewayName().length(), rect);
+        canvas.drawText(
+                info.getGatewayName(),
+                wSize * .125f,
+                upDownRectSize + singleGateSize * number + (singleGateSize + rect.height()) * .5f,
+                stringPaint
+        );
+
+        stringPaint.getTextBounds(info.getGateLocation(), 0, info.getGateLocation().length(), rect);
+        canvas.drawText(
+                info.getGateLocation(),
+                wSize * .875f - rect.width(),
+                upDownRectSize + singleGateSize * number + (singleGateSize + rect.height()) * .5f,
+                stringPaint
+        );
+
+        if (info.getNorthSpeed() != null) {
+            // south speed line
+            canvas.drawLine(
+                    wSize * .25f,
+                    upDownRectSize + singleGateSize * number + singleGateSize * .7f,
+                    wSize * .25f,
+                    upDownRectSize + singleGateSize * (number + 1) + singleGateSize * .3f,
+                    linePaint
+            );
+            canvas.drawLine(
+                    wSize * .23f,
+                    upDownRectSize + singleGateSize * (number + 1) + singleGateSize * .25f,
+                    wSize * .25f,
+                    upDownRectSize + singleGateSize * (number + 1) + singleGateSize * .3f,
+                    linePaint
+            );
+            canvas.drawLine(
+                    wSize * .27f,
+                    upDownRectSize + singleGateSize * (number + 1) + singleGateSize * .25f,
+                    wSize * .25f,
+                    upDownRectSize + singleGateSize * (number + 1) + singleGateSize * .3f,
+                    linePaint
+            );
+
+            // north speed line
+            canvas.drawLine(
+                    wSize * .75f,
+                    upDownRectSize + singleGateSize * number + singleGateSize * .7f,
+                    wSize * .75f,
+                    upDownRectSize + singleGateSize * (number + 1) + singleGateSize * .3f,
+                    linePaint
+            );
+            canvas.drawLine(
+                    wSize * .73f,
+                    upDownRectSize + singleGateSize * number + singleGateSize * .75f,
+                    wSize * .75f,
+                    upDownRectSize + singleGateSize * number + singleGateSize * .7f,
+                    linePaint
+            );
+            canvas.drawLine(
+                    wSize * .77f,
+                    upDownRectSize + singleGateSize * number + singleGateSize * .75f,
+                    wSize * .75f,
+                    upDownRectSize + singleGateSize * number + singleGateSize * .7f,
+                    linePaint
+            );
+
+            // south speed
+            speedTextPaint.getTextBounds(info.getSouthSpeed(), 0, info.getSouthSpeed().length(), rect);
+            speedCirclePaint.setColor(getSpeedCircleColor(info.getSouthSpeed()));
+            canvas.drawCircle(
+                    wSize * .25f,
+                    upDownRectSize + singleGateSize * (number + 0.5f) + singleGateSize * .5f,
+                    speedCircleRadius,
+                    speedCirclePaint
+            );
+            canvas.drawCircle(
+                    wSize * .25f,
+                    upDownRectSize + singleGateSize * (number + 0.5f) + singleGateSize * .5f,
+                    speedCircleRadius,
+                    linePaint
+            );
+            canvas.drawText(
+                    info.getSouthSpeed(),
+                    wSize * .25f - rect.width() / 2,
+                    upDownRectSize + singleGateSize * (number + 0.5f) + singleGateSize * .5f + rect.height() / 2,
+                    speedTextPaint
+            );
+            canvas.drawText(
+                    info.getSouthSpeed(),
+                    wSize * .25f - rect.width() / 2,
+                    upDownRectSize + singleGateSize * (number + 0.5f) + singleGateSize * .5f + rect.height() / 2,
+                    speedTextBoldPaint
+            );
+
+            // north speed
+            speedTextPaint.getTextBounds(info.getSouthSpeed(), 0, info.getSouthSpeed().length(), rect);
+            speedCirclePaint.setColor(getSpeedCircleColor(info.getNorthSpeed()));
+            canvas.drawCircle(
+                    wSize * .75f,
+                    upDownRectSize + singleGateSize * (number + 0.5f) + singleGateSize * .5f,
+                    speedCircleRadius,
+                    speedCirclePaint
+            );
+            canvas.drawCircle(
+                    wSize * .75f,
+                    upDownRectSize + singleGateSize * (number + 0.5f) + singleGateSize * .5f,
+                    speedCircleRadius,
+                    linePaint
+            );
+            canvas.drawText(
+                    info.getNorthSpeed(),
+                    wSize * .75f - rect.width() / 2,
+                    upDownRectSize + singleGateSize * (number + 0.5f) + singleGateSize * .5f + rect.height() / 2,
+                    speedTextPaint
+            );
+            canvas.drawText(
+                    info.getNorthSpeed(),
+                    wSize * .75f - rect.width() / 2,
+                    upDownRectSize + singleGateSize * (number + 0.5f) + singleGateSize * .5f + rect.height() / 2,
+                    speedTextBoldPaint
+            );
+        }
     }
 
     @Override
@@ -191,8 +340,7 @@ public class SpeedView extends View {
         if (isGatewayInfoReady) {
             int i = 0;
             for (GatewayInfo info : infoList) {
-//                canvas.drawLine(0, (i + 1) * singleGateSize, wSize, (i + 1) * singleGateSize, new Paint());
-//                drawGateway(canvas, info, i);
+                drawGateway(canvas, info, i);
                 i++;
             }
         }

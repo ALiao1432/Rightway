@@ -18,8 +18,8 @@ public class MorphView extends View {
     private int H_SIZE = 150;
     private final SvgData svgData;
     private final Paint paint = new Paint();
-    private DataPath path;
     private ValueAnimator pointAnimator;
+    protected DataPath path;
     private int currentId;
 
     @Override
@@ -100,7 +100,5 @@ public class MorphView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-
-        canvas.drawPath(path, paint);
     }
 }

@@ -31,6 +31,8 @@ public class HighwayNameView extends View {
     private int wSize;
     private int hSize;
     private int singleSize;
+    private float stringSize;
+    private float paintWidth;
     private boolean isMoved = false;
 
     @Override
@@ -40,17 +42,18 @@ public class HighwayNameView extends View {
         wSize = MeasureSpec.getSize(widthMeasureSpec);
         hSize = MeasureSpec.getSize(widthMeasureSpec);
 
+        stringSize = wSize * .1f;
+        paintWidth = wSize * .0125f;
         singleSize = Math.round(hSize * .325f);
         hSize = highwayNames.length * singleSize;
 
         initRect();
+        initPaint();
         setMeasuredDimension(wSize, hSize);
     }
 
     HighwayNameView(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
-
-        initPaint();
     }
 
     @Override
@@ -105,11 +108,11 @@ public class HighwayNameView extends View {
     }
 
     private void initPaint() {
-        stringPaint = getPaint("#fcfcfc", Paint.Style.FILL, 110);
-        ovalPaint = getPaint("#00897b", Paint.Style.STROKE, 200);
+        stringPaint = getPaint("#fcfcfc", Paint.Style.FILL, stringSize, paintWidth);
+        ovalPaint = getPaint("#00897b", Paint.Style.STROKE, 200, paintWidth);
     }
 
-    private Paint getPaint(String color, Paint.Style style, float textSize) {
+    private Paint getPaint(String color, Paint.Style style, float textSize, float width) {
         Paint p = new Paint();
 
         p.setStyle(style);
@@ -117,7 +120,7 @@ public class HighwayNameView extends View {
         p.setTextSize(textSize);
         p.setAntiAlias(true);
         p.setStrokeCap(Paint.Cap.ROUND);
-        p.setStrokeWidth(12);
+        p.setStrokeWidth(width);
 
         return p;
     }

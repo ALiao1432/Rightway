@@ -11,7 +11,7 @@ public class SvgData {
     private final Context context;
     private DataPath morphPath;
 
-    SvgData(Context context) {
+    public SvgData(Context context) {
         this.context = context;
     }
 
