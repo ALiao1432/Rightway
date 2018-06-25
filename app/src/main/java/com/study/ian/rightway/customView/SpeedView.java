@@ -51,6 +51,7 @@ public class SpeedView extends MorphView {
             "#ffff00", // 60 <= speed <= 79
             "#388E3C", // 40 <= speed
     };
+    private String connectCode;
     private boolean isGatewayInfoReady = false;
     private int wSize;
     private int hSize;
@@ -88,7 +89,7 @@ public class SpeedView extends MorphView {
         paintWidth = wSize * .0125f;
         stringSize = wSize * .08f;
         speedTextSize = wSize * .068f;
-        singleGateSize = hSize * .3225f;
+        singleGateSize = hSize * .3247f;
         upDownRectSize = hSize * .12f;
         speedCircleRadius = wSize * .088f;
 
@@ -140,7 +141,13 @@ public class SpeedView extends MorphView {
         infoList = getHighwayStatus(code);
     }
 
+    public boolean updateGatewayStatus() {
+        infoList = getHighwayStatus(connectCode);
+        return infoList != null;
+    }
+
     private List<GatewayInfo> getHighwayStatus(String connectCode) {
+        this.connectCode = connectCode;
         List<GatewayInfo> tempList = new ArrayList<>();
         isGatewayInfoReady = false;
 
@@ -152,7 +159,10 @@ public class SpeedView extends MorphView {
                 Elements speedLeft = content.getElementsByClass("speed speedLeft");
                 Elements speedRight = content.getElementsByClass("speed speedRight");
 
-                Log.d(TAG, "secNames : " + secNames.size());
+                // show log
+//                displayLongLog(document.toString());
+//                Log.d(TAG, "secNames : " + secNames.size());
+
                 for (int i = 0; i < secNames.size(); i++) {
                     StringTokenizer tokenizer = new StringTokenizer(secNames.get(i).text(), " -");
 
@@ -177,7 +187,6 @@ public class SpeedView extends MorphView {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
         }).start();
 
         return tempList;
@@ -343,6 +352,17 @@ public class SpeedView extends MorphView {
                 drawGateway(canvas, info, i);
                 i++;
             }
+        }
+    }
+
+    private void displayLongLog(String log) {
+        int MAX_LOG_SIZE = 2000;
+
+        if (log.length() > MAX_LOG_SIZE) {
+            Log.d(TAG, "Display Log : " + log.substring(0, MAX_LOG_SIZE));
+            displayLongLog(log.substring(MAX_LOG_SIZE, log.length()));
+        } else {
+            Log.d(TAG, "Display Log : " + log);
         }
     }
 }
