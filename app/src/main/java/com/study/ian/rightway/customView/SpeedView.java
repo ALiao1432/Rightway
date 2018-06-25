@@ -39,7 +39,6 @@ public class SpeedView extends MorphView {
     private Paint stringPaint;
     private Paint linePaint;
     private Paint speedTextPaint;
-    private Paint speedTextBoldPaint;
     private Paint speedCirclePaint;
     private Rect measureRect = new Rect();
     private RectF toUpRectF = new RectF();
@@ -129,12 +128,10 @@ public class SpeedView extends MorphView {
         stringPaint = getPaint("#fcfcfc", Paint.Style.FILL, stringSize, paintWidth);
         linePaint = getPaint("#00897b", Paint.Style.STROKE, 200, paintWidth);
         speedTextPaint = getPaint("#fcfcfc", Paint.Style.FILL, speedTextSize, paintWidth);
-        speedTextBoldPaint = getPaint("#000000", Paint.Style.STROKE, speedTextSize, paintWidth);
         speedCirclePaint = getPaint(speedColors[0], Paint.Style.FILL, 0, paintWidth);
 
-        speedTextBoldPaint.setStrokeWidth(1.5f);
-        speedTextBoldPaint.setTextAlign(Paint.Align.CENTER);
         speedTextPaint.setTextAlign(Paint.Align.CENTER);
+        speedTextPaint.setShadowLayer(wSize * .05f, 0, 0, Color.argb(200,0,0,0));
     }
 
     private void initVdPath(int totalHSize) {
@@ -358,12 +355,6 @@ public class SpeedView extends MorphView {
                     upDownRectSize + singleGateSize * (number + 0.5f) + singleGateSize * .5f + measureRect.height() / 2,
                     speedTextPaint
             );
-            canvas.drawText(
-                    info.getSouthSpeed(),
-                    wSize * .25f,
-                    upDownRectSize + singleGateSize * (number + 0.5f) + singleGateSize * .5f + measureRect.height() / 2,
-                    speedTextBoldPaint
-            );
 
             // north speed
             speedTextPaint.getTextBounds(info.getSouthSpeed(), 0, info.getSouthSpeed().length(), measureRect);
@@ -385,12 +376,6 @@ public class SpeedView extends MorphView {
                     wSize * .75f,
                     upDownRectSize + singleGateSize * (number + 0.5f) + singleGateSize * .5f + measureRect.height() / 2,
                     speedTextPaint
-            );
-            canvas.drawText(
-                    info.getNorthSpeed(),
-                    wSize * .75f,
-                    upDownRectSize + singleGateSize * (number + 0.5f) + singleGateSize * .5f + measureRect.height() / 2,
-                    speedTextBoldPaint
             );
         }
     }
