@@ -1,5 +1,6 @@
 package com.study.ian.rightway.customView;
 
+import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Canvas;
@@ -12,6 +13,7 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.view.animation.LinearInterpolator;
 import android.widget.ScrollView;
 
 import com.study.ian.rightway.R;
@@ -42,7 +44,11 @@ public class SpeedView extends MorphView {
     private Paint speedTextPaint;
     private Paint speedTextBoldPaint;
     private Paint speedCirclePaint;
-    private Rect rect = new Rect();
+    private Rect measureRect = new Rect();
+    private RectF toUpRectF = new RectF();
+    private RectF toDownRectF = new RectF();
+    private DataPath toUpPath;
+    private DataPath toDownPath;
     private SvgData svgData = new SvgData(this.getContext());
     private String[] speedColors = {
             "#512DA8", // speed < 20
@@ -55,6 +61,7 @@ public class SpeedView extends MorphView {
     private boolean isGatewayInfoReady = false;
     private int wSize;
     private int hSize;
+    private int totalHSize = 0;
     private float paintWidth;
     private float stringSize;
     private float speedTextSize;
@@ -69,11 +76,16 @@ public class SpeedView extends MorphView {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                Log.d(TAG, "MotionEvent.ACTION_DOWN");
-                requestLayout();
+                int x = Math.round(event.getX());
+                int y = Math.round(event.getY());
+
+                if (toUpRectF.contains(x, y)) {
+                    new Thread(() -> scrollView.smoothScrollTo(wSize / 2, 0)).start();
+                } else if (toDownRectF.contains(x, y)) {
+                    new Thread(() -> scrollView.smoothScrollTo(wSize / 2, totalHSize)).start();
+                }
                 break;
         }
         performClick();
@@ -98,11 +110,14 @@ public class SpeedView extends MorphView {
         if (!isGatewayInfoReady) {
             setMeasuredDimension(wSize, hSize);
         } else {
+            totalHSize = Math.round(infoList.size() * singleGateSize + upDownRectSize * 2);
             setMeasuredDimension(
                     wSize,
-                    Math.round(infoList.size() * singleGateSize + upDownRectSize * 2)
+                    totalHSize
             );
         }
+        initVdPath(totalHSize);
+        initRectF();
     }
 
     public SpeedView(Context context, @Nullable AttributeSet attrs) {
@@ -122,6 +137,38 @@ public class SpeedView extends MorphView {
         speedCirclePaint = getPaint(speedColors[0], Paint.Style.FILL, 0, paintWidth);
 
         speedTextBoldPaint.setStrokeWidth(1.5f);
+    }
+
+    private void initVdPath(int totalHSize) {
+        Matrix matrix = new Matrix();
+        RectF tempRectF = new RectF();
+
+        matrix.setScale(2.5f, 2.2f);
+
+        // initial path form vector drawable
+        toDownPath = svgData.getPath(R.drawable.vd_to_down, this);
+        toUpPath = svgData.getPath(R.drawable.vd_to_up, this);
+
+        // enlarge the size of path
+        toDownPath.transform(matrix);
+        toUpPath.transform(matrix);
+
+        // move to the center
+        toUpPath.computeBounds(tempRectF, true);
+        toUpPath.offset(
+                (wSize - tempRectF.width() * 2f) * .5f,
+                totalHSize - upDownRectSize - (upDownRectSize - tempRectF.height()) * .75f
+        );
+        toDownPath.computeBounds(tempRectF, true);
+        toDownPath.offset(
+                (wSize - tempRectF.width() * 2f) * .5f,
+                (upDownRectSize - tempRectF.height()) * .75f
+        );
+    }
+
+    private void initRectF() {
+        toDownPath.computeBounds(toDownRectF, true);
+        toUpPath.computeBounds(toUpRectF, true);
     }
 
     private Paint getPaint(String color, Paint.Style style, float textSize, float width) {
@@ -219,20 +266,36 @@ public class SpeedView extends MorphView {
                 linePaint
         );
 
-        stringPaint.getTextBounds(info.getGatewayName(), 0, info.getGatewayName().length(), rect);
+        stringPaint.getTextBounds(info.getGatewayName(), 0, info.getGatewayName().length(), measureRect);
         canvas.drawText(
                 info.getGatewayName(),
                 wSize * .125f,
-                upDownRectSize + singleGateSize * number + (singleGateSize + rect.height()) * .5f,
+                upDownRectSize + singleGateSize * number + (singleGateSize + measureRect.height()) * .5f,
                 stringPaint
         );
 
-        stringPaint.getTextBounds(info.getGateLocation(), 0, info.getGateLocation().length(), rect);
+        stringPaint.getTextBounds(info.getGateLocation(), 0, info.getGateLocation().length(), measureRect);
         canvas.drawText(
                 info.getGateLocation(),
-                wSize * .875f - rect.width(),
-                upDownRectSize + singleGateSize * number + (singleGateSize + rect.height()) * .5f,
+                wSize * .875f - measureRect.width(),
+                upDownRectSize + singleGateSize * number + (singleGateSize + measureRect.height()) * .5f,
                 stringPaint
+        );
+
+        // draw up and down arrow
+        canvas.drawPath(toUpPath, linePaint);
+        canvas.drawPath(toDownPath, linePaint);
+        canvas.drawCircle(
+                toUpRectF.centerX(),
+                toUpRectF.centerY(),
+                toUpRectF.width() * .9f,
+                linePaint
+        );
+        canvas.drawCircle(
+                toDownRectF.centerX(),
+                toDownRectF.centerY(),
+                toDownRectF.width() * .9f,
+                linePaint
         );
 
         if (info.getNorthSpeed() != null) {
@@ -283,7 +346,7 @@ public class SpeedView extends MorphView {
             );
 
             // south speed
-            speedTextPaint.getTextBounds(info.getSouthSpeed(), 0, info.getSouthSpeed().length(), rect);
+            speedTextPaint.getTextBounds(info.getSouthSpeed(), 0, info.getSouthSpeed().length(), measureRect);
             speedCirclePaint.setColor(getSpeedCircleColor(info.getSouthSpeed()));
             canvas.drawCircle(
                     wSize * .25f,
@@ -299,19 +362,19 @@ public class SpeedView extends MorphView {
             );
             canvas.drawText(
                     info.getSouthSpeed(),
-                    wSize * .25f - rect.width() / 2,
-                    upDownRectSize + singleGateSize * (number + 0.5f) + singleGateSize * .5f + rect.height() / 2,
+                    wSize * .25f - measureRect.width() / 2,
+                    upDownRectSize + singleGateSize * (number + 0.5f) + singleGateSize * .5f + measureRect.height() / 2,
                     speedTextPaint
             );
             canvas.drawText(
                     info.getSouthSpeed(),
-                    wSize * .25f - rect.width() / 2,
-                    upDownRectSize + singleGateSize * (number + 0.5f) + singleGateSize * .5f + rect.height() / 2,
+                    wSize * .25f - measureRect.width() / 2,
+                    upDownRectSize + singleGateSize * (number + 0.5f) + singleGateSize * .5f + measureRect.height() / 2,
                     speedTextBoldPaint
             );
 
             // north speed
-            speedTextPaint.getTextBounds(info.getSouthSpeed(), 0, info.getSouthSpeed().length(), rect);
+            speedTextPaint.getTextBounds(info.getSouthSpeed(), 0, info.getSouthSpeed().length(), measureRect);
             speedCirclePaint.setColor(getSpeedCircleColor(info.getNorthSpeed()));
             canvas.drawCircle(
                     wSize * .75f,
@@ -327,14 +390,14 @@ public class SpeedView extends MorphView {
             );
             canvas.drawText(
                     info.getNorthSpeed(),
-                    wSize * .75f - rect.width() / 2,
-                    upDownRectSize + singleGateSize * (number + 0.5f) + singleGateSize * .5f + rect.height() / 2,
+                    wSize * .75f - measureRect.width() / 2,
+                    upDownRectSize + singleGateSize * (number + 0.5f) + singleGateSize * .5f + measureRect.height() / 2,
                     speedTextPaint
             );
             canvas.drawText(
                     info.getNorthSpeed(),
-                    wSize * .75f - rect.width() / 2,
-                    upDownRectSize + singleGateSize * (number + 0.5f) + singleGateSize * .5f + rect.height() / 2,
+                    wSize * .75f - measureRect.width() / 2,
+                    upDownRectSize + singleGateSize * (number + 0.5f) + singleGateSize * .5f + measureRect.height() / 2,
                     speedTextBoldPaint
             );
         }
