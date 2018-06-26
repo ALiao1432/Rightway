@@ -266,7 +266,7 @@ public class EventView extends MorphView {
                 stringPaint
         );
         canvas.drawText(
-                info.getDiscription(),
+                info.getDescription(),
                 wSize * .15f,
                 upDownRectSize + singleGateSize * number + singleGateSize * .82f,
                 stringPaint

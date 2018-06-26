@@ -1,14 +1,13 @@
 package com.study.ian.rightway.result;
 
+import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.widget.ScrollView;
 
 import com.study.ian.rightway.R;
 import com.study.ian.rightway.customView.EventView;
 import com.study.ian.rightway.customView.HighwayNameView;
-import com.study.ian.rightway.customView.SpeedView;
 
 public class EventResultActivity extends AppCompatActivity {
 

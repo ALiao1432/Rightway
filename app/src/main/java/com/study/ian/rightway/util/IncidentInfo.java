@@ -18,16 +18,8 @@ public class IncidentInfo {
         return location;
     }
 
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
     public String getDir() {
         return dir;
-    }
-
-    public void setDir(String dir) {
-        this.dir = dir;
     }
 
     public String getTime() {
@@ -38,12 +30,8 @@ public class IncidentInfo {
         this.time = time;
     }
 
-    public String getDiscription() {
+    public String getDescription() {
         return description;
-    }
-
-    public void setDiscription(String discription) {
-        this.description = discription;
     }
 
     @Override
