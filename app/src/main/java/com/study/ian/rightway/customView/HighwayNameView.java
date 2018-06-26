@@ -9,6 +9,7 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.os.Bundle;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -71,11 +72,11 @@ public class HighwayNameView extends View {
 
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                isMoved = false;
                 return true;
             case MotionEvent.ACTION_UP:
                 int x = Math.round(event.getX());
                 int y = Math.round(event.getY());
+                isMoved = false;
 
                 for (int i = 0; i < rectF.length; i++) {
                     if (!isMoved && rectF[i].contains(x, y)) {
