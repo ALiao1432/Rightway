@@ -9,11 +9,11 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.os.Bundle;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
 import com.study.ian.rightway.R;
+import com.study.ian.rightway.result.EventResultActivity;
 import com.study.ian.rightway.result.SpeedResultActivity;
 
 public class HighwayNameView extends View {
@@ -28,12 +28,17 @@ public class HighwayNameView extends View {
     public final static String KEY_CONNECT = "KEY_CONNECT";
     private final String[] highwayNames = getResources().getStringArray(R.array.highway_names);
     private final String[] highwayConnectCode = getResources().getStringArray(R.array.highway_connect_code);
+    private String chose;
     private int wSize;
     private int hSize;
     private int singleSize;
     private float stringSize;
     private float paintWidth;
     private boolean isMoved = false;
+
+    public void setEventOrSpeed(String chose) {
+        this.chose = chose;
+    }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
@@ -78,14 +83,17 @@ public class HighwayNameView extends View {
                         Intent intent = new Intent();
 
                         bundle.putString(KEY_CONNECT, highwayConnectCode[i]);
-                        intent.setClass(this.getContext(), SpeedResultActivity.class);
+                        if (chose.equals("SPEED")) {
+                            intent.setClass(this.getContext(), SpeedResultActivity.class);
+                        } else if (chose.equals("EVENT")) {
+                            intent.setClass(this.getContext(), EventResultActivity.class);
+                        }
                         intent.putExtras(bundle);
                         this.getContext().startActivity(intent);
                     }
                 }
                 break;
             case MotionEvent.ACTION_MOVE:
-                Log.d(TAG, "MotionEvent.ACTION_MOVE");
                 isMoved = true;
                 return true;
         }

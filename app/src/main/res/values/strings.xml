@@ -2,6 +2,7 @@
     <string name="app_name">Rightway</string>
     <string name="highway_speed">行車速度</string>
     <string name="highway_event">施工事件</string>
+    <string name="no_incident">No Incident~~~</string>
 
     <string-array name="highway_names">
         <item>國道1號</item>

@@ -3,12 +3,14 @@ package com.study.ian.rightway;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.Button;
 
-import com.study.ian.rightway.select.EventSelectActivity;
-import com.study.ian.rightway.select.SpeedSelectActivity;
+import com.study.ian.rightway.select.SelectActivity;
 
 public class MainActivity extends AppCompatActivity {
+
+    private final String TAG = "MainActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,16 +22,20 @@ public class MainActivity extends AppCompatActivity {
 
         Button.OnClickListener onClickListener = view -> {
             Intent intent = new Intent();
+            Bundle bundle = new Bundle();
 
             switch (view.getId()) {
                 case R.id.btnSelectSpeed:
-                    intent.setClass(this, SpeedSelectActivity.class);
+                    Log.d(TAG, "btnSelectSpeed");
+                    bundle.putString("CHOSE", "SPEED");
                     break;
                 case R.id.btnSelectEvent:
-                    intent.setClass(this, EventSelectActivity.class);
+                    Log.d(TAG, "btnSelectEvent");
+                    bundle.putString("CHOSE", "EVENT");
                     break;
             }
-
+            intent.putExtras(bundle);
+            intent.setClass(this, SelectActivity.class);
             startActivity(intent);
         };
 

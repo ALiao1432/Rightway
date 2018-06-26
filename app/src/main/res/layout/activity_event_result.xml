@@ -6,5 +6,25 @@
     android:layout_height="match_parent"
     tools:context=".result.EventResultActivity">
 
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/eventRefreshLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
+        <ScrollView
+            android:id="@+id/eventScrollView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:scrollbarThumbVertical="@drawable/custom_scroll_thumb"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.study.ian.rightway.customView.EventView
+                android:id="@+id/eventView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </ScrollView>
+    </android.support.v4.widget.SwipeRefreshLayout>
 </android.support.constraint.ConstraintLayout>
