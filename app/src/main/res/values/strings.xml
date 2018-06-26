@@ -29,31 +29,6 @@
         <item>快速公路88號</item>
     </string-array>
 
-    <string-array name="highway_icon_text">
-        <item>1</item>
-        <item>1高</item>
-        <item>3甲</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
-        <item>5</item>
-        <item>6</item>
-        <item>8</item>
-        <item>10</item>
-        <item>62</item>
-        <item>64</item>
-        <item>66</item>
-        <item>68</item>
-        <item>72</item>
-        <item>74</item>
-        <item>76</item>
-        <item>78</item>
-        <item>82</item>
-        <item>84</item>
-        <item>86</item>
-        <item>88</item>
-    </string-array>
-
     <string-array name="highway_connect_code">
         <item>10010</item>
         <item>10019</item>

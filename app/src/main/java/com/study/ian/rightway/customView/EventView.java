@@ -16,21 +16,18 @@ import android.widget.ScrollView;
 
 import com.study.ian.rightway.R;
 import com.study.ian.rightway.util.DataPath;
-import com.study.ian.rightway.util.GatewayInfo;
 import com.study.ian.rightway.util.IncidentInfo;
 import com.study.ian.rightway.util.MorphView;
 import com.study.ian.rightway.util.SvgData;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 import org.jsoup.nodes.TextNode;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.StringTokenizer;
 
 public class EventView extends MorphView {
 
@@ -40,15 +37,13 @@ public class EventView extends MorphView {
     private List<IncidentInfo> infoList;
     private Paint stringPaint;
     private Paint linePaint;
-    private Paint speedTextPaint;
-    private Paint speedCirclePaint;
-    private Rect measureRect = new Rect();
-    private RectF toUpRectF = new RectF();
-    private RectF toDownRectF = new RectF();
+    private final Rect measureRect = new Rect();
+    private final RectF toUpRectF = new RectF();
+    private final RectF toDownRectF = new RectF();
     private DataPath toUpPath;
     private DataPath toDownPath;
     private DataPath smilePath;
-    private SvgData svgData = new SvgData(this.getContext());
+    private final SvgData svgData = new SvgData(this.getContext());
     private String connectCode;
     private boolean isGatewayInfoReady = false;
     private int wSize;
@@ -56,10 +51,8 @@ public class EventView extends MorphView {
     private int totalHSize = 0;
     private float paintWidth;
     private float stringSize;
-    private float speedTextSize;
     private float singleGateSize;
     private float upDownRectSize;
-    private float speedCircleRadius;
 
     @Override
     public boolean performClick() {
@@ -92,10 +85,8 @@ public class EventView extends MorphView {
         hSize = MeasureSpec.getSize(heightMeasureSpec);
         paintWidth = wSize * .0125f;
         stringSize = wSize * .08f;
-        speedTextSize = wSize * .068f;
         singleGateSize = hSize * .44f;
         upDownRectSize = hSize * .12f;
-        speedCircleRadius = wSize * .088f;
 
         initPaint();
 
@@ -127,10 +118,6 @@ public class EventView extends MorphView {
     private void initPaint() {
         stringPaint = getPaint("#fcfcfc", Paint.Style.FILL, stringSize, paintWidth);
         linePaint = getPaint("#00897b", Paint.Style.STROKE, 200, paintWidth);
-        speedTextPaint = getPaint("#fcfcfc", Paint.Style.FILL, speedTextSize, paintWidth);
-
-        speedTextPaint.setTextAlign(Paint.Align.CENTER);
-        speedTextPaint.setShadowLayer(wSize * .05f, 0, 0, Color.argb(200, 0, 0, 0));
     }
 
     private void initVdPath(int totalHSize) {
@@ -248,7 +235,7 @@ public class EventView extends MorphView {
         return tempList;
     }
 
-    public void drawGateway(Canvas canvas, IncidentInfo info, int number) {
+    private void drawGateway(Canvas canvas, IncidentInfo info, int number) {
         // draw up and down arrow
         canvas.drawPath(toUpPath, linePaint);
         canvas.drawPath(toDownPath, linePaint);

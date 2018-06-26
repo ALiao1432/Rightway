@@ -40,13 +40,13 @@ public class SpeedView extends MorphView {
     private Paint linePaint;
     private Paint speedTextPaint;
     private Paint speedCirclePaint;
-    private Rect measureRect = new Rect();
-    private RectF toUpRectF = new RectF();
-    private RectF toDownRectF = new RectF();
+    private final Rect measureRect = new Rect();
+    private final RectF toUpRectF = new RectF();
+    private final RectF toDownRectF = new RectF();
     private DataPath toUpPath;
     private DataPath toDownPath;
-    private SvgData svgData = new SvgData(this.getContext());
-    private String[] speedColors = {
+    private final SvgData svgData = new SvgData(this.getContext());
+    private final String[] speedColors = {
             "#512DA8", // speed < 20
             "#D32F2F", // 20 <= speed <= 39
             "#F57C00", // 40 <= speed <= 59
@@ -256,7 +256,7 @@ public class SpeedView extends MorphView {
         }
     }
 
-    public void drawGateway(Canvas canvas, GatewayInfo info, int number) {
+    private void drawGateway(Canvas canvas, GatewayInfo info, int number) {
         canvas.drawRoundRect(
                 wSize * .075f,
                 upDownRectSize + singleGateSize * number + singleGateSize * .3f,

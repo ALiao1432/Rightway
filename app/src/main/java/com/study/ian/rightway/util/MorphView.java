@@ -20,7 +20,7 @@ public class MorphView extends View {
     private final SvgData svgData;
     private final Paint paint = new Paint();
     private ValueAnimator pointAnimator;
-    protected DataPath path;
+    private DataPath path;
     private int currentId;
 
     @Override

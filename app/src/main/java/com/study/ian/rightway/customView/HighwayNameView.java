@@ -20,7 +20,7 @@ public class HighwayNameView extends View {
 
     private final String TAG = "HighwayNameView";
 
-    private Rect highwayNameRect = new Rect();
+    private final Rect highwayNameRect = new Rect();
     private RectF[] rectF;
     private Paint stringPaint;
     private Paint ovalPaint;

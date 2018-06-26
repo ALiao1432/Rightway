@@ -8,8 +8,8 @@ public class GatewayInfo {
 
     private String gatewayName;
     private String gateLocation;
-    private String southSpeed;
-    private String northSpeed;
+    private final String southSpeed;
+    private final String northSpeed;
 
     public GatewayInfo(String gatewayName, String southSpeed, String northSpeed) {
         this.gatewayName = gatewayName;
