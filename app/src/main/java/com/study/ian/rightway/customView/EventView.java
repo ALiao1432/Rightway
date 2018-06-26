@@ -93,7 +93,7 @@ public class EventView extends MorphView {
         if (!isGatewayInfoReady) {
             setMeasuredDimension(wSize, hSize);
         } else {
-            if (infoList.size() == 0) {
+            if (infoList.size() < 2) {
                 setMeasuredDimension(wSize, hSize);
             } else {
                 totalHSize = Math.round(infoList.size() * singleGateSize + upDownRectSize * 2);
@@ -236,9 +236,11 @@ public class EventView extends MorphView {
     }
 
     private void drawGateway(Canvas canvas, IncidentInfo info, int number) {
-        // draw up and down arrow
-        canvas.drawPath(toUpPath, linePaint);
-        canvas.drawPath(toDownPath, linePaint);
+        if (infoList.size() > 2) {
+            // draw up and down arrow
+            canvas.drawPath(toUpPath, linePaint);
+            canvas.drawPath(toDownPath, linePaint);
+        }
 
         canvas.drawLine(
                 wSize * .1f,
