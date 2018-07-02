@@ -196,7 +196,7 @@ public class EventView extends MorphView {
 
         new Thread(() -> {
             try {
-                Document document = Jsoup.connect("http://1968.freeway.gov.tw/incident/getincidents/fid/" + connectCode).get();
+                Document document = Jsoup.connect("https://1968.freeway.gov.tw/incident/getincidents/fid/" + connectCode).get();
                 Elements body = document.getElementsByTag("body");
 
                 for (TextNode node : body.get(0).textNodes()) {

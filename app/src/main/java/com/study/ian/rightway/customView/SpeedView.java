@@ -201,7 +201,7 @@ public class SpeedView extends MorphView {
 
         new Thread(() -> {
             try {
-                Document document = Jsoup.connect("http://1968.freeway.gov.tw/traffic/index/fid/" + connectCode).get();
+                Document document = Jsoup.connect("https://1968.freeway.gov.tw/traffic/index/fid/" + connectCode).get();
                 Element content = document.getElementById("secs_body");
                 Elements secNames = content.getElementsByClass("sec_name");
                 Elements speedLeft = content.getElementsByClass("speed speedLeft");
