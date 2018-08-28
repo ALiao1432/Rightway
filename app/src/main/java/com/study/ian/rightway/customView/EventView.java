@@ -32,8 +32,6 @@ import java.util.List;
 
 public class EventView extends MorphView {
 
-    private final String TAG = "EventView";
-
     private ScrollView scrollView;
     private List<IncidentInfo> infoList;
     private Paint stringPaint;
@@ -310,6 +308,7 @@ public class EventView extends MorphView {
     private void displayLongLog(String log) {
         int MAX_LOG_SIZE = 2000;
 
+        String TAG = "EventView";
         if (log.length() > MAX_LOG_SIZE) {
             Log.d(TAG, "Display Log : " + log.substring(0, MAX_LOG_SIZE));
             displayLongLog(log.substring(MAX_LOG_SIZE, log.length()));

@@ -34,8 +34,6 @@ import java.util.StringTokenizer;
 
 public class SpeedView extends MorphView {
 
-    private final String TAG = "SpeedView";
-
     private ScrollView scrollView;
     private List<GatewayInfo> infoList;
     private Paint stringPaint;
@@ -58,7 +56,6 @@ public class SpeedView extends MorphView {
     private String connectCode;
     private boolean isGatewayInfoReady = false;
     private int wSize;
-    private int hSize;
     private int totalHSize = 0;
     private float paintWidth;
     private float stringSize;
@@ -90,7 +87,7 @@ public class SpeedView extends MorphView {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 
         wSize = MeasureSpec.getSize(widthMeasureSpec);
-        hSize = MeasureSpec.getSize(heightMeasureSpec);
+        int hSize = MeasureSpec.getSize(heightMeasureSpec);
         paintWidth = wSize * .0125f;
         stringSize = wSize * .08f;
         speedTextSize = wSize * .068f;
@@ -395,6 +392,7 @@ public class SpeedView extends MorphView {
     private void displayLongLog(String log) {
         int MAX_LOG_SIZE = 2000;
 
+        String TAG = "SpeedView";
         if (log.length() > MAX_LOG_SIZE) {
             Log.d(TAG, "Display Log : " + log.substring(0, MAX_LOG_SIZE));
             displayLongLog(log.substring(MAX_LOG_SIZE, log.length()));

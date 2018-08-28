@@ -9,8 +9,6 @@ import com.study.ian.rightway.customView.HighwayNameView;
 
 public class SelectActivity extends AppCompatActivity {
 
-    private final String TAG = "SelectActivity";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,6 +21,7 @@ public class SelectActivity extends AppCompatActivity {
         HighwayNameView highwayNameView = findViewById(R.id.highwayNameView);
 
         highwayNameView.setEventOrSpeed(getIntent().getExtras().getString("CHOSE"));
+        String TAG = "SelectActivity";
         Log.d(TAG, getIntent().getExtras().getString("CHOSE"));
     }
 }

@@ -2,10 +2,10 @@ package com.study.ian.rightway.util;
 
 public class IncidentInfo {
 
-    private String location;
-    private String dir;
+    private final String location;
+    private final String dir;
     private String time;
-    private String description;
+    private final String description;
 
     public IncidentInfo(String location, String dir, String time, String description) {
         this.location = location;

@@ -1,12 +1,12 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Rightway</string>
-    <string name="highway_speed">行車速度</string>
-    <string name="highway_event">施工事件</string>
-    <string name="no_incident">No Incident~~~</string>
-    <string name="fog">濃霧</string>
-    <string name="both_way">雙向</string>
+    <string name="highway_speed" tools:keep="@string/highway_speed">行車速度</string>
+    <string name="highway_event" tools:keep="@string/highway_event">施工事件</string>
+    <string name="no_incident" tools:keep="@string/no_incident">No Incident~~~</string>
+    <string name="fog" tools:keep="@string/fog">濃霧</string>
+    <string name="both_way" tools:keep="@string/both_way">雙向</string>
 
-    <string-array name="highway_names">
+    <string-array name="highway_names" tools:keep="@array/highway_names">
         <item>國道1號</item>
         <item>國1高架</item>
         <item>國道3甲</item>
@@ -31,7 +31,7 @@
         <item>快速公路88號</item>
     </string-array>
 
-    <string-array name="highway_connect_code">
+    <string-array name="highway_connect_code" tools:keep="@array/highway_connect_code">
         <item>10010</item>
         <item>10019</item>
         <item>10031</item>
