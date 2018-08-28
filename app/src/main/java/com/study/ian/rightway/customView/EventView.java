@@ -1,5 +1,6 @@
 package com.study.ian.rightway.customView;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Canvas;
@@ -54,15 +55,11 @@ public class EventView extends MorphView {
     private float singleGateSize;
     private float upDownRectSize;
 
-    @Override
-    public boolean performClick() {
-        return super.performClick();
-    }
-
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN:
+        switch (event.getActionMasked()) {
+            case MotionEvent.ACTION_UP:
                 int x = Math.round(event.getX());
                 int y = Math.round(event.getY());
 
@@ -73,8 +70,7 @@ public class EventView extends MorphView {
                 }
                 break;
         }
-        performClick();
-        return super.onTouchEvent(event);
+        return true;
     }
 
     @Override
@@ -190,9 +186,10 @@ public class EventView extends MorphView {
 
     private List<IncidentInfo> getHighwayStatus(String connectCode) {
         this.connectCode = connectCode;
+        isGatewayInfoReady = false;
         List<TextNode> tempTextNodeList = new ArrayList<>();
         List<IncidentInfo> tempList = new ArrayList<>();
-        isGatewayInfoReady = false;
+        List<Integer> fogList = new ArrayList<>();
 
         new Thread(() -> {
             try {
@@ -205,6 +202,11 @@ public class EventView extends MorphView {
                     }
                 }
 
+                tempTextNodeList.stream()
+                        .filter(s -> s.toString().equals(getResources().getString(R.string.fog)))
+                        .forEach(s -> fogList.add(tempTextNodeList.indexOf(s)));
+                fogList.forEach(i -> tempTextNodeList.add(i - 1, new TextNode(getResources().getString(R.string.both_way))));
+
                 for (int i = 0; i < tempTextNodeList.size(); i += 4) {
                     tempList.add(new IncidentInfo(
                             tempTextNodeList.get(i).text(),
@@ -214,10 +216,10 @@ public class EventView extends MorphView {
                     ));
                 }
 
-                for (IncidentInfo incidentInfo : tempList) {
-                    Log.d(TAG, incidentInfo.toString());
-                }
                 // show log
+//                for (IncidentInfo incidentInfo : tempList) {
+//                    Log.d(TAG, incidentInfo.toString());
+//                }
 //                displayLongLog(a.toString());
 //                Log.d(TAG, "secNames : " + secNames.size());
 

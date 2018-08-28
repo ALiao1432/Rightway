@@ -3,6 +3,8 @@
     <string name="highway_speed">行車速度</string>
     <string name="highway_event">施工事件</string>
     <string name="no_incident">No Incident~~~</string>
+    <string name="fog">濃霧</string>
+    <string name="both_way">雙向</string>
 
     <string-array name="highway_names">
         <item>國道1號</item>

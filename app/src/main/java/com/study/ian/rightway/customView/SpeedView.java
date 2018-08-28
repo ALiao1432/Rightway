@@ -1,5 +1,6 @@
 package com.study.ian.rightway.customView;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Canvas;
@@ -12,6 +13,7 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.view.View;
 import android.widget.ScrollView;
 
 import com.study.ian.rightway.R;
@@ -65,15 +67,11 @@ public class SpeedView extends MorphView {
     private float upDownRectSize;
     private float speedCircleRadius;
 
-    @Override
-    public boolean performClick() {
-        return super.performClick();
-    }
-
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN:
+        switch (event.getActionMasked()) {
+            case MotionEvent.ACTION_UP:
                 int x = Math.round(event.getX());
                 int y = Math.round(event.getY());
 
@@ -84,8 +82,7 @@ public class SpeedView extends MorphView {
                 }
                 break;
         }
-        performClick();
-        return super.onTouchEvent(event);
+        return true;
     }
 
     @Override
